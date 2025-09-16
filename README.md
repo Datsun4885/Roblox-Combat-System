@@ -1,2 +1,12 @@
 # Roblox-Combat-System
-This is a combat system for a passion project. The combat system includes melee weapons, guns, quick swapping weapons as well as being able to choose weapons.
+
+- Overview
+  A third person combat system for a passion project of mine
+
+- Features
+  Melee weapons
+  Ranged weapons (guns, etc..)
+  Quick weapons swapping, ability to choose weapons
+  Can be controlled by mission scripts
+  Made for r6
+  
