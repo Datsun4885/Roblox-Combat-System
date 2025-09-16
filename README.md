@@ -9,4 +9,6 @@
 - Quick weapons swapping, ability to choose weapons,
 - Can be controlled by mission scripts,
 - Made for r6
-  
+
+## Example
+![combat demo](media/shooting-reloading.gif)
