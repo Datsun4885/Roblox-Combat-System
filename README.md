@@ -19,10 +19,14 @@ due to not wanting to leak my code I am providing a small example from the main 
 
 ```lua
 -- Primary Attack Input
-function OnPrimaryAttackInput()
+local function OnPrimaryAttackInput()
 	if CheckHuman() ~= true then return end
 
-	if peaceful then return end
+	if not ALLOWED_TO_SHOOT[GetState()] then return end
+	
+	if NoAmmo then
+		return
+	end
 	
 	if unequipped then
 		Dictonary[CurrentWeapon.Value]:Start()
@@ -32,16 +36,23 @@ function OnPrimaryAttackInput()
 	
 	Dictonary[CurrentWeapon.Value]:AttackInput()
 	if Dictonary[CurrentWeapon.Value]["WeaponType"] ~= "Melee" then
-
-		if Ads and NoAmmo == false then
-			RecoilSpring:shove(Dictonary[CurrentWeapon.Value]["RecoilSpring2"])
-		elseif Ads == false and NoAmmo == false then
-			RecoilSpring:shove(Dictonary[CurrentWeapon.Value]["RecoilSpring1"])
+		if NoAmmo then
+			return
 		end
+		local stats = Dictonary[CurrentWeapon.Value]
+		local recoilVector = Ads and stats["RecoilSpring2"] or stats["RecoilSpring1"]
+		RecoilSpring:shove(recoilVector / recoilModifier)
 
-		coroutine.wrap(function()
-			wait(Dictonary[CurrentWeapon.Value]["FireRate"])
-			RecoilSpring:shove(Vector3.new(-2.8, math.random(-1,1), -5))
+	elseif Dictonary[CurrentWeapon.Value]["WeaponType"] == "Melee" then
+		OTSModule:ToggleShiftLock(true)
+		
+		if meleeCooldown then
+			task.cancel(meleeCooldown)
+		end
+		
+		meleeCooldown = task.delay(meleeOTSCooldown, function()
+			OTSModule:ToggleShiftLock(false)
+			meleeCooldown = nil
 		end)
 	end
 end
